@@ -66,9 +66,7 @@ def regular_choice(update: Update, context: CallbackContext) -> int:
     update.message.reply_text(f'Estas en {text.lower()}, marca las donacionas diarias')
 
     reply_keyboard = [
-    ['Donaciones', 'Ayudas'],
-    ['Galerias', 'Musica'],
-    ['Web'],
+    ['Cobre', 'Acero oscuro', 'Energia', 'Oro'],
 ]
     markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
     
