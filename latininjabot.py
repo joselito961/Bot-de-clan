@@ -52,7 +52,7 @@ def facts_to_str(user_data: Dict[str, str]) -> str:
 def start(update: Update, context: CallbackContext) -> int:
     """Start the conversation and ask user for input."""
     update.message.reply_text(
-        "¡BIENVENIDO!, soy @Latininjasbot y estoy para ayudarlos en lo que pueda; si tienes alguna duda solo escribe:",
+        "¡BIENVENIDO!, soy @Latininjasbot y estoy para ayudarlos en lo que pueda; seleccinar una de las opciones:",
         reply_markup=markup,
     )
 
@@ -63,7 +63,7 @@ def regular_choice(update: Update, context: CallbackContext) -> int:
     """Ask the user for info about the selected predefined choice."""
     text = update.message.text
     context.user_data['choice'] = text
-    update.message.reply_text(f'Your {text.lower()}? Yes, I would love to hear about that!')
+    update.message.reply_text(f'Guerrero {text.lower()}, estas aqui para marcar tus donaciones')
 
     return TYPING_REPLY
 
@@ -71,7 +71,7 @@ def regular_choice(update: Update, context: CallbackContext) -> int:
 def custom_choice(update: Update, context: CallbackContext) -> int:
     """Ask the user for a description of a custom category."""
     update.message.reply_text(
-        'Alright, please send me the category first, for example "Most impressive skill"'
+        'Selecciona las donaciones que hiciste en el dia'
     )
 
     return TYPING_CHOICE
