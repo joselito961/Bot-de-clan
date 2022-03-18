@@ -140,7 +140,7 @@ def main() -> None:
                 )
             ],
         },
-        fallbacks=[MessageHandler(Filters.regex('^Web$'), done)],
+        fallbacks=[MessageHandler(Filters.regex('^Web$'), web)],
     )
 
     dispatcher.add_handler(conv_handler)
