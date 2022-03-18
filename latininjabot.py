@@ -38,7 +38,7 @@ CHOOSING, TYPING_REPLY, TYPING_CHOICE = range(3)
 reply_keyboard = [
     ['Donaciones', 'Ayudas'],
     ['Galerias', 'Musica'],
-    ['Done'],
+    ['Web'],
 ]
 markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
 
@@ -95,14 +95,14 @@ def received_information(update: Update, context: CallbackContext) -> int:
     return CHOOSING
 
 
-def done(update: Update, context: CallbackContext) -> int:
+def web(update: Update, context: CallbackContext) -> int:
     """Display the gathered info and end the conversation."""
     user_data = context.user_data
     if 'choice' in user_data:
         del user_data['choice']
 
     update.message.reply_text(
-        f"I learned these facts about you: {facts_to_str(user_data)}Until next time!",
+        f"visita nuestra pagina web: {facts_to_str(user_data)}https://clanlatininja.com",
         reply_markup=ReplyKeyboardRemove(),
     )
 
@@ -130,17 +130,17 @@ def main() -> None:
             ],
             TYPING_CHOICE: [
                 MessageHandler(
-                    Filters.text & ~(Filters.command | Filters.regex('^Done$')), regular_choice
+                    Filters.text & ~(Filters.command | Filters.regex('^Web$')), regular_choice
                 )
             ],
             TYPING_REPLY: [
                 MessageHandler(
-                    Filters.text & ~(Filters.command | Filters.regex('^Done$')),
+                    Filters.text & ~(Filters.command | Filters.regex('^Web$')),
                     received_information,
                 )
             ],
         },
-        fallbacks=[MessageHandler(Filters.regex('^Done$'), done)],
+        fallbacks=[MessageHandler(Filters.regex('^Web$'), done)],
     )
 
     dispatcher.add_handler(conv_handler)
