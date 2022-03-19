@@ -124,9 +124,9 @@ def main() -> None:
         states={
             CHOOSING: [
                 MessageHandler(
-                    Filters.regex('^(Age|Favourite colour|Number of siblings)$'), regular_choice
+                    Filters.regex('^(Donaciones|Ayudas|Galerias)$'), regular_choice
                 ),
-                MessageHandler(Filters.regex('^Something else...$'), custom_choice),
+                MessageHandler(Filters.regex('^Musica$'), custom_choice),
             ],
             TYPING_CHOICE: [
                 MessageHandler(
