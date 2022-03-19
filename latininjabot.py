@@ -65,6 +65,7 @@ def regular_choice(update: Update, context: CallbackContext) -> int:
     context.user_data['choice'] = text
     update.message.reply_text(f'Estas en {text.lower()}, marca las donacionas diarias')
 
+    
     return TYPING_REPLY
 
 
