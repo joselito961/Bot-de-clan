@@ -63,7 +63,7 @@ def regular_choice(update: Update, context: CallbackContext) -> int:
     """Ask the user for info about the selected predefined choice."""
     text = update.message.text
     context.user_data['choice'] = text
-    update.message.reply_text(f'Guerrero {text.lower()}, estas aqui para marcar tus donaciones')
+    update.message.reply_text(f'Estas en {text.lower()}, marca las donacionas diarias')
 
     return TYPING_REPLY
 
