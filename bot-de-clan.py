@@ -65,10 +65,8 @@ def regular_choice(update: Update, context: CallbackContext) -> int:
     context.user_data['choice'] = text
     update.message.reply_text(f'Estas en {text.lower()}, marca las donacionas diarias')
 
-    reply_keyboard = [
-    ['Cobre', 'Acero oscuro', 'Energia', 'Oro'],
-]
-    markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
+
+    
     
     return TYPING_REPLY
 
@@ -150,6 +148,32 @@ def main() -> None:
 
     dispatcher.add_handler(conv_handler)
 
+    # Add conversation handler with the states CHOOSING, TYPING_CHOICE and TYPING_REPLY
+    conv_handler = ConversationHandler(
+        entry_points=[CommandHandler('start', start)],
+        states={
+            CHOOSING: [
+                MessageHandler(
+                    Filters.regex('^(Donaciones|Ayudas|Galerias)$'), regular_choice
+                ),
+                MessageHandler(Filters.regex('^Musica$'), custom_choice),
+            ],
+            TYPING_CHOICE: [
+                MessageHandler(
+                    Filters.text & ~(Filters.command | Filters.regex('^Web$')), regular_choice
+                )
+            ],
+            TYPING_REPLY: [
+                MessageHandler(
+                    Filters.text & ~(Filters.command | Filters.regex('^Web$')),
+                    received_information,
+                )
+            ],
+        },
+        fallbacks=[MessageHandler(Filters.regex('^Web$'), web)],
+    )
+
+    dispatcher.add_handler(conv_handler)
     # Start the Bot
     updater.start_polling()
 
