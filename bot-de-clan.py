@@ -14,7 +14,11 @@ bot.
 """
 
 import logging
+from turtle import update
 from typing import Dict
+
+from flask_login import user_loaded_from_cookie, user_loaded_from_header
+from numpy import choose
 
 from telegram import ReplyKeyboardMarkup, Update, ReplyKeyboardRemove
 from telegram.ext import (
@@ -42,6 +46,12 @@ reply_keyboard = [
 ]
 markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
 
+CHOOS, TYP_REPLY, TYP_CHOI = range(3)
+reply_key = [
+    ['Cobre','Energia','Acero', 'Oro']
+]
+
+mark = ReplyKeyboardMarkup(reply_key, one_time_keyboard=True)
 
 def facts_to_str(user_data: Dict[str, str]) -> str:
     """Helper function for formatting the gathered user info."""
@@ -111,7 +121,19 @@ def web(update: Update, context: CallbackContext) -> int:
 
     user_data.clear()
     return ConversationHandler.END
+def donaciones(update: Update, context: CallbackContext) -> int:
+    """muestra las opciones que tiene donaciones"""
+    update.message.reply_text(
+        "Seleccione las donaciones que hizo en el juego y luego coloque el monto:",
+        reply_markup=mark,
+    )
 
+    return CHOOSING
+    
+def lista(update: Update, context: CallbackContext) -> int:
+    """lista de donadores"""
+    user_data = context.user_data
+    
 
 def main() -> None:
     """Run the bot."""
@@ -123,27 +145,27 @@ def main() -> None:
 
     # Add conversation handler with the states CHOOSING, TYPING_CHOICE and TYPING_REPLY
     conv_handler = ConversationHandler(
-        entry_points=[CommandHandler('start', start)],
+        entry_points=[CommandHandler('Donaciones', donaciones)],
         states={
-            CHOOSING: [
+            CHOOS: [
                 MessageHandler(
-                    Filters.regex('^(Donaciones|Ayudas|Galerias)$'), regular_choice
+                    Filters.regex('^(Cobre|Energia|Acero)$'), regular_choice
                 ),
-                MessageHandler(Filters.regex('^Musica$'), custom_choice),
+                MessageHandler(Filters.regex('^Oro$'), custom_choice),
             ],
-            TYPING_CHOICE: [
+            TYP_CHOI: [
                 MessageHandler(
-                    Filters.text & ~(Filters.command | Filters.regex('^Web$')), regular_choice
+                    Filters.text & ~(Filters.command | Filters.regex('^Lista')), regular_choice
                 )
             ],
-            TYPING_REPLY: [
+            TYP_REPLY: [
                 MessageHandler(
-                    Filters.text & ~(Filters.command | Filters.regex('^Web$')),
+                    Filters.text & ~(Filters.command | Filters.regex('^Lista$')),
                     received_information,
                 )
             ],
         },
-        fallbacks=[MessageHandler(Filters.regex('^Web$'), web)],
+        fallbacks=[MessageHandler(Filters.regex('^Lista$'), lista)],
     )
 
     dispatcher.add_handler(conv_handler)
